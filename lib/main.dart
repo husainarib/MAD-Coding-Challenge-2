@@ -27,9 +27,13 @@ class _HalloweenGameState extends State<HalloweenApp> {
   }
 
   void _playBackgroundMusic() async {
-    await _audioPlayer.setAsset('lib/audio/scary_audio.mp3');
-    _audioPlayer.setLoopMode(LoopMode.one);
-    _audioPlayer.play();
+    try {
+      await _audioPlayer.setAsset('lib/audio/scary_audio.mp3');
+      _audioPlayer.setLoopMode(LoopMode.one);
+      await _audioPlayer.play();
+    } catch (e) {
+      print("Error playing audio: $e");
+    }
   }
 
   void _initializePosition() {
@@ -40,8 +44,8 @@ class _HalloweenGameState extends State<HalloweenApp> {
   void _moveBat() {
     setState(() {
       Random random = Random();
-      _batTop = random.nextDouble() * 400;
-      _batLeft = random.nextDouble() * 300;
+      _batTop = random.nextDouble() * 600;
+      _batLeft = random.nextDouble() * 1000;
     });
   }
 
