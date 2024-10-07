@@ -19,11 +19,13 @@ class _HalloweenGameState extends State<HalloweenApp> {
       _ghostLeft,
       _frTop,
       _frLeft;
-  String bat = "lib/img/bat.png";
-  String pk = "lib/img/pumpkin.png";
-  String ghost = "lib/img/ghost.png";
-  String fred = "lib/img/freddy.png";
+  final List<String> pictureList = ["lib/img/bat.png", "lib/img/pumpkin.png",
+    "lib/img/ghost.png", "lib/img/freddy.png"];
   late AudioPlayer _audioPlayer;
+  int winnerIndex = -1;
+  Random random = Random();
+  String textBoxString = "Playing!!";
+  bool isGameActive = true;
 
   @override
   void initState() {
@@ -31,11 +33,16 @@ class _HalloweenGameState extends State<HalloweenApp> {
     _audioPlayer = AudioPlayer();
     _playBackgroundMusic();
     _initializePosition();
+    _getWinnerIndex();
     Timer.periodic(Duration(seconds: 2), (timer) {
-      _moveBat();
-      _movePumpkin();
-      _moveGhost();
-      _moveFred();
+      if (!isGameActive) {
+        timer.cancel();
+      } else {
+        _moveBat();
+        _movePumpkin();
+        _moveGhost();
+        _moveFred();
+      }
     });
   }
 
@@ -62,7 +69,6 @@ class _HalloweenGameState extends State<HalloweenApp> {
 
   void _moveBat() {
     setState(() {
-      Random random = Random();
       _batTop = random.nextDouble() * 700;
       _batLeft = random.nextDouble() * 1500;
     });
@@ -70,7 +76,6 @@ class _HalloweenGameState extends State<HalloweenApp> {
 
   void _movePumpkin() {
     setState(() {
-      Random random = Random();
       _pkTop = random.nextDouble() * 700;
       _pkLeft = random.nextDouble() * 1500;
     });
@@ -78,7 +83,6 @@ class _HalloweenGameState extends State<HalloweenApp> {
 
   void _moveGhost() {
     setState(() {
-      Random random = Random();
       _ghostTop = random.nextDouble() * 700;
       _ghostLeft = random.nextDouble() * 1500;
     });
@@ -86,9 +90,30 @@ class _HalloweenGameState extends State<HalloweenApp> {
 
   void _moveFred() {
     setState(() {
-      Random random = Random();
       _frTop = random.nextDouble() * 700;
       _frLeft = random.nextDouble() * 1500;
+    });
+  }
+
+  void _getWinnerIndex() {
+    setState(() {
+      winnerIndex = random.nextInt(4);
+    });
+    print(winnerIndex);
+  }
+
+  void _checkIfWinnerIndex(int checkIndex) {
+    setState(() {
+      if (winnerIndex == checkIndex) {
+        textBoxString = "Winner!!";
+        _stopPicturesMovement();
+      }
+    });
+  }
+
+  void _stopPicturesMovement() {
+    setState(() {
+      isGameActive = false;
     });
   }
 
@@ -107,27 +132,55 @@ class _HalloweenGameState extends State<HalloweenApp> {
             top: _batTop,
             left: _batLeft,
             duration: const Duration(seconds: 2),
-            child: Image.asset(bat, width: 80),
+            child: GestureDetector(
+              onTap: () => _checkIfWinnerIndex(0),
+              child: Image.asset(pictureList[0], width: 80),
+            )
           ),
           AnimatedPositioned(
             top: _pkTop,
             left: _pkLeft,
             duration: const Duration(seconds: 2),
-            child: Image.asset(pk, width: 80),
+            child: GestureDetector(
+              onTap: () => _checkIfWinnerIndex(1),
+              child: Image.asset(pictureList[1], width: 80),
+            )
           ),
           //ghost
           AnimatedPositioned(
             top: _ghostTop,
             left: _ghostLeft,
             duration: const Duration(seconds: 2),
-            child: Image.asset(ghost, width: 80),
+            child: GestureDetector(
+              onTap: () => _checkIfWinnerIndex(2),
+              child: Image.asset(pictureList[2], width: 80),
+            )
           ),
           //freddy
           AnimatedPositioned(
             top: _frTop,
             left: _frLeft,
             duration: const Duration(seconds: 2),
-            child: Image.asset(fred, width: 80),
+            child: GestureDetector(
+              onTap: () => _checkIfWinnerIndex(3),
+              child: Image.asset(pictureList[3], width: 80),
+            )
+          ),
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              color: Colors.black54,
+              child: Text(
+                textBoxString,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
         ],
       ),
