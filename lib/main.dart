@@ -1,15 +1,19 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
 void main() => runApp(MaterialApp(home: HalloweenApp()));
+
 class HalloweenApp extends StatefulWidget {
   @override
   _HalloweenGameState createState() => _HalloweenGameState();
 }
+
 class _HalloweenGameState extends State<HalloweenApp> {
   late double _batTop, _batLeft;
   String img = "lib/img/bat.png";
+  late AudioPlayer _audioPlayer;
 
   @override
   void initState() {
@@ -18,6 +22,14 @@ class _HalloweenGameState extends State<HalloweenApp> {
     Timer.periodic(Duration(seconds: 2), (timer) {
       _moveBat();
     });
+    _audioPlayer = AudioPlayer();
+    _playBackgroundMusic();
+  }
+
+  void _playBackgroundMusic() async {
+    await _audioPlayer.setAsset('lib/audio/scary_audio.mp3');
+    _audioPlayer.setLoopMode(LoopMode.one);
+    _audioPlayer.play();
   }
 
   void _initializePosition() {
@@ -40,7 +52,7 @@ class _HalloweenGameState extends State<HalloweenApp> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/halloween_background.png',
+              'lib/img/background.jpg',
               fit: BoxFit.cover,
             ),
           ),
@@ -55,5 +67,3 @@ class _HalloweenGameState extends State<HalloweenApp> {
     );
   }
 }
-
-
