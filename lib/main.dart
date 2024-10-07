@@ -28,6 +28,8 @@ class _HalloweenGameState extends State<HalloweenApp> {
   @override
   void initState() {
     super.initState();
+    _audioPlayer = AudioPlayer();
+    _playBackgroundMusic();
     _initializePosition();
     Timer.periodic(Duration(seconds: 2), (timer) {
       _moveBat();
@@ -35,8 +37,6 @@ class _HalloweenGameState extends State<HalloweenApp> {
       _moveGhost();
       _moveFred();
     });
-    _audioPlayer = AudioPlayer();
-    _playBackgroundMusic();
   }
 
   void _playBackgroundMusic() async {
