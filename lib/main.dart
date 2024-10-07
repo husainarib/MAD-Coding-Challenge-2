@@ -19,8 +19,12 @@ class _HalloweenGameState extends State<HalloweenApp> {
       _ghostLeft,
       _frTop,
       _frLeft;
-  final List<String> pictureList = ["lib/img/bat.png", "lib/img/pumpkin.png",
-    "lib/img/ghost.png", "lib/img/freddy.png"];
+  final List<String> pictureList = [
+    "lib/img/bat.png",
+    "lib/img/pumpkin.png",
+    "lib/img/ghost.png",
+    "lib/img/freddy.png"
+  ];
   late AudioPlayer _audioPlayer;
   int winnerIndex = -1;
   Random random = Random();
@@ -69,29 +73,33 @@ class _HalloweenGameState extends State<HalloweenApp> {
 
   void _moveBat() {
     setState(() {
-      _batTop = random.nextDouble() * 700;
-      _batLeft = random.nextDouble() * 1500;
+      final screenSize = MediaQuery.of(context).size;
+      _batTop = random.nextDouble() * (screenSize.height - 50);
+      _batLeft = random.nextDouble() * (screenSize.width - 50);
     });
   }
 
   void _movePumpkin() {
     setState(() {
-      _pkTop = random.nextDouble() * 700;
-      _pkLeft = random.nextDouble() * 1500;
+      final screenSize = MediaQuery.of(context).size;
+      _pkTop = random.nextDouble() * (screenSize.height - 50);
+      _pkLeft = random.nextDouble() * (screenSize.width - 50);
     });
   }
 
   void _moveGhost() {
     setState(() {
-      _ghostTop = random.nextDouble() * 700;
-      _ghostLeft = random.nextDouble() * 1500;
+      final screenSize = MediaQuery.of(context).size;
+      _ghostTop = random.nextDouble() * (screenSize.height - 50);
+      _ghostLeft = random.nextDouble() * (screenSize.width - 50);
     });
   }
 
   void _moveFred() {
     setState(() {
-      _frTop = random.nextDouble() * 700;
-      _frLeft = random.nextDouble() * 1500;
+      final screenSize = MediaQuery.of(context).size;
+      _frTop = random.nextDouble() * (screenSize.height - 50);
+      _frLeft = random.nextDouble() * (screenSize.width - 50);
     });
   }
 
@@ -129,43 +137,39 @@ class _HalloweenGameState extends State<HalloweenApp> {
             ),
           ),
           AnimatedPositioned(
-            top: _batTop,
-            left: _batLeft,
-            duration: const Duration(seconds: 2),
-            child: GestureDetector(
-              onTap: () => _checkIfWinnerIndex(0),
-              child: Image.asset(pictureList[0], width: 80),
-            )
-          ),
+              top: _batTop,
+              left: _batLeft,
+              duration: const Duration(seconds: 2),
+              child: GestureDetector(
+                onTap: () => _checkIfWinnerIndex(0),
+                child: Image.asset(pictureList[0], width: 80),
+              )),
           AnimatedPositioned(
-            top: _pkTop,
-            left: _pkLeft,
-            duration: const Duration(seconds: 2),
-            child: GestureDetector(
-              onTap: () => _checkIfWinnerIndex(1),
-              child: Image.asset(pictureList[1], width: 80),
-            )
-          ),
+              top: _pkTop,
+              left: _pkLeft,
+              duration: const Duration(seconds: 2),
+              child: GestureDetector(
+                onTap: () => _checkIfWinnerIndex(1),
+                child: Image.asset(pictureList[1], width: 80),
+              )),
           //ghost
           AnimatedPositioned(
-            top: _ghostTop,
-            left: _ghostLeft,
-            duration: const Duration(seconds: 2),
-            child: GestureDetector(
-              onTap: () => _checkIfWinnerIndex(2),
-              child: Image.asset(pictureList[2], width: 80),
-            )
-          ),
+              top: _ghostTop,
+              left: _ghostLeft,
+              duration: const Duration(seconds: 2),
+              child: GestureDetector(
+                onTap: () => _checkIfWinnerIndex(2),
+                child: Image.asset(pictureList[2], width: 80),
+              )),
           //freddy
           AnimatedPositioned(
-            top: _frTop,
-            left: _frLeft,
-            duration: const Duration(seconds: 2),
-            child: GestureDetector(
-              onTap: () => _checkIfWinnerIndex(3),
-              child: Image.asset(pictureList[3], width: 80),
-            )
-          ),
+              top: _frTop,
+              left: _frLeft,
+              duration: const Duration(seconds: 2),
+              child: GestureDetector(
+                onTap: () => _checkIfWinnerIndex(3),
+                child: Image.asset(pictureList[3], width: 80),
+              )),
           Positioned(
             bottom: 20,
             right: 20,
