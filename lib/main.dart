@@ -25,6 +25,12 @@ class _HalloweenGameState extends State<HalloweenApp> {
     "lib/img/ghost.png",
     "lib/img/freddy.png"
   ];
+  final List<String> audioList = [
+    "lib/audio/freddyAudio.mp3",
+    "lib/audio/jumpScaryAudio.mp3",
+    "lib/audio/scaryLaughterAudio.mp3",
+    "lib/audio/scarySoundAudio.mp3",
+  ];
   late AudioPlayer _audioPlayer;
   int winnerIndex = -1;
   Random random = Random();
@@ -35,9 +41,9 @@ class _HalloweenGameState extends State<HalloweenApp> {
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
-    _playBackgroundMusic();
     _initializePosition();
     _getWinnerIndex();
+    _startBackgroundMusicWithDelay();
     Timer.periodic(Duration(seconds: 2), (timer) {
       if (!isGameActive) {
         timer.cancel();
@@ -50,9 +56,15 @@ class _HalloweenGameState extends State<HalloweenApp> {
     });
   }
 
+  void _startBackgroundMusicWithDelay() async {
+    if(isGameActive) {
+      _playBackgroundMusic();
+    }
+  }
+
   void _playBackgroundMusic() async {
     try {
-      await _audioPlayer.setAsset('lib/audio/scary_audio.mp3');
+      await _audioPlayer.setAsset('lib/audio/halloweenSound.mp3');
       _audioPlayer.setLoopMode(LoopMode.one);
       await _audioPlayer.play();
     } catch (e) {
@@ -110,13 +122,31 @@ class _HalloweenGameState extends State<HalloweenApp> {
     print(winnerIndex);
   }
 
-  void _checkIfWinnerIndex(int checkIndex) {
+  void _checkIfWinnerIndex(int checkIndex) async {
     setState(() {
       if (winnerIndex == checkIndex) {
         textBoxString = "Winner!!";
         _stopPicturesMovement();
+        _audioPlayer.stop();
       }
     });
+
+    if (winnerIndex != checkIndex) {
+      try {
+        final audioRandomNumber = random.nextInt(4);
+
+        await _audioPlayer.setAsset(audioList[audioRandomNumber]);
+        await _audioPlayer.play();
+
+        await Future.delayed(Duration(seconds: 4));
+
+        await _audioPlayer.setAsset('lib/audio/halloweenSound.mp3');
+        _audioPlayer.setLoopMode(LoopMode.one);
+        await _audioPlayer.play();
+      } catch (e) {
+        print("Error playing audio: $e");
+      }
+    }
   }
 
   void _stopPicturesMovement() {
